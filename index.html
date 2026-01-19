@@ -8,175 +8,231 @@
   <!-- خط عربي لطيف (اختياري - يحتاج نت) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Marhey:wght@300;400;600&family=El+Messiri:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    :root{
-      --bg1:#ffe6f1;
-      --bg2:#fff7fb;
-      --card:#ffffffcc;
-      --text:#2b2b2b;
-      --muted:#6b6b6b;
-      --accent:#ff4f9a;
-      --accent2:#ff2e86;
-      --shadow: 0 16px 45px rgba(0,0,0,.12);
-      --radius: 22px;
-    }
+  :root{
+    --bgA:#0f0c1a;
+    --bgB:#1b0f2a;
+    --glow:#ff5fa2;
+    --glow2:#8a5cff;
+    --card: rgba(255,255,255,.10);
+    --stroke: rgba(255,255,255,.18);
+    --text:#ffffff;
+    --muted: rgba(255,255,255,.72);
+    --shadow: 0 18px 60px rgba(0,0,0,.45);
+    --radius: 26px;
+  }
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-family: "Tajawal", Tahoma, Arial, sans-serif;
-      color:var(--text);
-      background: radial-gradient(1200px 600px at 20% 10%, var(--bg1), transparent 60%),
-                  radial-gradient(1200px 600px at 80% 90%, #ffd6ea, transparent 60%),
-                  linear-gradient(180deg, var(--bg2), #fff);
-      overflow-x:hidden;
-    }
+  *{ box-sizing:border-box; }
 
-    /* قلوب خفيفة بالخلفية */
-    .hearts{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      opacity:.18;
-      overflow:hidden;
-    }
-    .heart{
-      position:absolute;
-      font-size:20px;
-      animation: floatUp linear infinite;
-      filter: blur(.2px);
-    }
-    @keyframes floatUp{
-      from{ transform: translateY(110vh) rotate(0deg); }
-      to{ transform: translateY(-15vh) rotate(20deg); }
-    }
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    direction:rtl;
+    color:var(--text);
+    background:
+      radial-gradient(900px 500px at 15% 20%, rgba(255,95,162,.22), transparent 60%),
+      radial-gradient(900px 500px at 85% 80%, rgba(138,92,255,.20), transparent 60%),
+      linear-gradient(180deg, var(--bgA), var(--bgB));
+    overflow-x:hidden;
+    font-family: "El Messiri", Tahoma, Arial, sans-serif;
+  }
 
-    .wrap{
-      width:min(780px, 92vw);
-      padding:18px;
-    }
+  /* خلفية نجوم/نقط */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image: radial-gradient(rgba(255,255,255,.12) 1px, transparent 1px);
+    background-size: 26px 26px;
+    opacity:.20;
+    pointer-events:none;
+  }
 
-    .card{
-      background:var(--card);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,.7);
-      box-shadow: var(--shadow);
-      border-radius: var(--radius);
-      padding: 26px 22px;
-    }
+  /* قلوب خفيفة */
+  .hearts{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:.22;
+    overflow:hidden;
+  }
+  .heart{
+    position:absolute;
+    animation: floatUp linear infinite;
+    filter: drop-shadow(0 0 10px rgba(255,95,162,.25));
+  }
+  @keyframes floatUp{
+    from{ transform: translateY(110vh) rotate(0deg); }
+    to{ transform: translateY(-15vh) rotate(25deg); }
+  }
 
-    .top{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:12px;
-    }
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:10px 14px;
-      border-radius:999px;
-      background: rgba(255,79,154,.12);
-      border: 1px solid rgba(255,79,154,.25);
-      font-weight:700;
-    }
-    .small{
-      color:var(--muted);
-      font-size:14px;
-    }
+  .wrap{
+    width:min(820px, 92vw);
+    padding:18px;
+  }
 
-    h1{
-      margin:10px 0 6px;
-      font-size: clamp(22px, 2.8vw, 34px);
-      letter-spacing:.2px;
-    }
-    p{
-      margin:0;
-      line-height:1.75;
-      font-size: clamp(15px, 2vw, 18px);
-      color: var(--text);
-    }
+  .card{
+    background: var(--card);
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(14px);
+    padding: 28px 24px;
+    position:relative;
+    overflow:hidden;
+  }
 
-    .divider{
-      height:1px;
-      background: linear-gradient(90deg, transparent, rgba(0,0,0,.12), transparent);
-      margin:16px 0;
-    }
+  /* لمعة لطيفة على الكرت */
+  .card::after{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    background: radial-gradient(600px 220px at 25% 10%, rgba(255,95,162,.18), transparent 60%),
+                radial-gradient(600px 220px at 80% 90%, rgba(138,92,255,.16), transparent 60%);
+    pointer-events:none;
+  }
 
-    .question{
-      margin-top:6px;
-      font-weight:800;
-      font-size: clamp(18px, 2.2vw, 22px);
-    }
+  .top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:12px;
+    position:relative;
+    z-index:1;
+  }
 
-    .btns{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:16px;
-    }
-    button{
-      border:0;
-      border-radius: 16px;
-      padding: 12px 18px;
-      font-size: 16px;
-      font-weight:700;
-      cursor:pointer;
-      transition: transform .08s ease, filter .15s ease;
-      flex: 1 1 150px;
-    }
-    button:active{ transform: scale(.98); }
-    .primary{
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color:white;
-    }
-    .ghost{
-      background: rgba(255,255,255,.7);
-      border:1px solid rgba(0,0,0,.08);
-      color: #333;
-    }
-    .ghost:hover{ filter: brightness(.98); }
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 14px;
+    border-radius:999px;
+    background: rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.18);
+    font-weight:700;
+  }
+  .small{
+    color:var(--muted);
+    font-size:14px;
+  }
 
-    .fade{
-      animation: fadeIn .22s ease both;
-    }
-    @keyframes fadeIn{
-      from{opacity:0; transform: translateY(6px);}
-      to{opacity:1; transform: translateY(0);}
-    }
+  h1{
+    margin:10px 0 6px;
+    font-family: "Marhey", "El Messiri", Tahoma, Arial, sans-serif;
+    font-size: clamp(22px, 3vw, 36px);
+    letter-spacing:.2px;
+    position:relative;
+    z-index:1;
+    text-shadow: 0 0 18px rgba(255,95,162,.18);
+  }
 
-    /* شاشة دخول */
-    .lock{
-      display:grid;
-      gap:10px;
-      margin-top:10px;
-    }
-    input{
-      width:100%;
-      padding:12px 14px;
-      border-radius:14px;
-      border: 1px solid rgba(0,0,0,.14);
-      font-size:16px;
-      outline:none;
-      background: rgba(255,255,255,.85);
-    }
-    .hint{ color: var(--muted); font-size:13px; }
+  p{
+    margin:0;
+    line-height:1.85;
+    font-size: clamp(15px, 2vw, 18px);
+    color: rgba(255,255,255,.88);
+    position:relative;
+    z-index:1;
+  }
 
-    .footerNote{
-      margin-top:14px;
-      text-align:center;
-      color: var(--muted);
-      font-size:13px;
-    }
-  </style>
+  .divider{
+    height:1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+    margin:16px 0;
+    position:relative;
+    z-index:1;
+  }
+
+  .question{
+    margin-top:6px;
+    font-weight:700;
+    font-size: clamp(18px, 2.2vw, 22px);
+    position:relative;
+    z-index:1;
+  }
+
+  .btns{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:16px;
+    position:relative;
+    z-index:1;
+  }
+
+  button{
+    border:0;
+    border-radius: 16px;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight:700;
+    cursor:pointer;
+    transition: transform .08s ease, filter .18s ease;
+    flex: 1 1 150px;
+  }
+  button:active{ transform: scale(.98); }
+
+  .primary{
+    background: linear-gradient(135deg, var(--glow), var(--glow2));
+    color:white;
+    box-shadow: 0 10px 26px rgba(255,95,162,.18);
+  }
+
+  .ghost{
+    background: rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.18);
+    color: rgba(255,255,255,.92);
+  }
+  .ghost:hover{ filter: brightness(1.08); }
+
+  .fade{
+    animation: fadeIn .22s ease both;
+  }
+  @keyframes fadeIn{
+    from{opacity:0; transform: translateY(6px);}
+    to{opacity:1; transform: translateY(0);}
+  }
+
+  .lock{
+    display:grid;
+    gap:10px;
+    margin-top:10px;
+    position:relative;
+    z-index:1;
+  }
+
+  input{
+    width:100%;
+    padding:12px 14px;
+    border-radius:14px;
+    border: 1px solid rgba(255,255,255,.22);
+    font-size:16px;
+    outline:none;
+    background: rgba(0,0,0,.18);
+    color: white;
+  }
+
+  .hint{
+    color: rgba(255,255,255,.70);
+    font-size:13px;
+  }
+
+  .footerNote{
+    margin-top:14px;
+    text-align:center;
+    color: rgba(255,255,255,.65);
+    font-size:13px;
+    position:relative;
+    z-index:1;
+  }
+</style>
+
 </head>
 
 <body>
@@ -336,3 +392,4 @@
 </script>
 </body>
 </html>
+
