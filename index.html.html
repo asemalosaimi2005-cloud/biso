@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>رسالة لبيسو 💕</title>
+
+  <!-- خط عربي لطيف (اختياري - يحتاج نت) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg1:#ffe6f1;
+      --bg2:#fff7fb;
+      --card:#ffffffcc;
+      --text:#2b2b2b;
+      --muted:#6b6b6b;
+      --accent:#ff4f9a;
+      --accent2:#ff2e86;
+      --shadow: 0 16px 45px rgba(0,0,0,.12);
+      --radius: 22px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family: "Tajawal", Tahoma, Arial, sans-serif;
+      color:var(--text);
+      background: radial-gradient(1200px 600px at 20% 10%, var(--bg1), transparent 60%),
+                  radial-gradient(1200px 600px at 80% 90%, #ffd6ea, transparent 60%),
+                  linear-gradient(180deg, var(--bg2), #fff);
+      overflow-x:hidden;
+    }
+
+    /* قلوب خفيفة بالخلفية */
+    .hearts{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.18;
+      overflow:hidden;
+    }
+    .heart{
+      position:absolute;
+      font-size:20px;
+      animation: floatUp linear infinite;
+      filter: blur(.2px);
+    }
+    @keyframes floatUp{
+      from{ transform: translateY(110vh) rotate(0deg); }
+      to{ transform: translateY(-15vh) rotate(20deg); }
+    }
+
+    .wrap{
+      width:min(780px, 92vw);
+      padding:18px;
+    }
+
+    .card{
+      background:var(--card);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.7);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: 26px 22px;
+    }
+
+    .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      background: rgba(255,79,154,.12);
+      border: 1px solid rgba(255,79,154,.25);
+      font-weight:700;
+    }
+    .small{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    h1{
+      margin:10px 0 6px;
+      font-size: clamp(22px, 2.8vw, 34px);
+      letter-spacing:.2px;
+    }
+    p{
+      margin:0;
+      line-height:1.75;
+      font-size: clamp(15px, 2vw, 18px);
+      color: var(--text);
+    }
+
+    .divider{
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(0,0,0,.12), transparent);
+      margin:16px 0;
+    }
+
+    .question{
+      margin-top:6px;
+      font-weight:800;
+      font-size: clamp(18px, 2.2vw, 22px);
+    }
+
+    .btns{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:16px;
+    }
+    button{
+      border:0;
+      border-radius: 16px;
+      padding: 12px 18px;
+      font-size: 16px;
+      font-weight:700;
+      cursor:pointer;
+      transition: transform .08s ease, filter .15s ease;
+      flex: 1 1 150px;
+    }
+    button:active{ transform: scale(.98); }
+    .primary{
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color:white;
+    }
+    .ghost{
+      background: rgba(255,255,255,.7);
+      border:1px solid rgba(0,0,0,.08);
+      color: #333;
+    }
+    .ghost:hover{ filter: brightness(.98); }
+
+    .fade{
+      animation: fadeIn .22s ease both;
+    }
+    @keyframes fadeIn{
+      from{opacity:0; transform: translateY(6px);}
+      to{opacity:1; transform: translateY(0);}
+    }
+
+    /* شاشة دخول */
+    .lock{
+      display:grid;
+      gap:10px;
+      margin-top:10px;
+    }
+    input{
+      width:100%;
+      padding:12px 14px;
+      border-radius:14px;
+      border: 1px solid rgba(0,0,0,.14);
+      font-size:16px;
+      outline:none;
+      background: rgba(255,255,255,.85);
+    }
+    .hint{ color: var(--muted); font-size:13px; }
+
+    .footerNote{
+      margin-top:14px;
+      text-align:center;
+      color: var(--muted);
+      font-size:13px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="hearts" id="hearts"></div>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="top">
+        <div class="badge">💕 لبيسو <span class="small">رسالة خاصة</span></div>
+        <div class="small" id="stepHint">—</div>
+      </div>
+
+      <div id="screen" class="fade"></div>
+
+      <div class="footerNote">مصنوعة بحب 🌸</div>
+    </div>
+  </div>
+
+<script>
+  // ====== إعدادات “الخصوصية” ======
+  // غيّر الرمز هنا (مثال: 2005)
+  const ACCESS_PIN = "400";
+
+  // ====== محتوى أسئلتك ورسائلك ======
+  const flow = [
+    {
+      q: "انتي تحبين نفسك صح؟",
+      yes: { msg:"وأنا كمان أحبك أكثر من حبك لنفسك ياقلبي", label:"تحبين نفسك ياشطورتي" },
+      no:  { msg:"ما يصلح هيك ياروحي أكيد إنتي تحبين نفسك والأكيد كمان إني أنا أحبك أكثر", label:"بتحبين نفسك ياروحي" },
+      els: { msg:"إجابتك غير واضحه لكن أحببببببك مررررره يابسمتي وأكيد إنك تحبين محبوبتي", label:"تحبين نفسك إن شاء الله ياقلبي" }
+    },
+    {
+      q: "انتي تحبيني صح؟",
+      yes: { msg:"وأنا كمان أحبببببببك يا محبوبتي انتي والله", label:"تحبيني يا ملاكي" },
+      no:  { msg:"متأكد إن هذي مو اجابتك الصدقيه الي ينطق فيها قلبك ياقلبي انتي وعشان هيك أنا كمان مررررره أحبكك", label:"بتحبيني يادنيتي" },
+      els: { msg:"إجابتك غير واضحه لكن أحببببببك مررررره يابسمتي وأكيد إنك تحبيني يا روح روحي انتي", label:"تحبيني إن شاء الله ياروح روحي" }
+    },
+    {
+      q: "تحبين علاقتنا صح؟",
+      yes: { msg:"وأنا كمان أحبببببب علاقتنا يا محبوبتي انتي والله", label:"تحبين علاقتنا الحلوه والجمميلة ياجميلتي انتي" },
+      no:  { msg:"متأكد إن هذي مو اجابتك الصدقيه الي ينطق فيها قلبك ياقلبي انتي أقدر إنك متضايقه مني \"حاليًا\"", label:"بتحبين علاقتنا الحلوه والجميلة ياعيوني الجميلة" },
+      els: { msg:"إجابتك غير واضحه لكن أحببببببك مررررره يابسمتي وأكيد إنك تحبين علاقتنا يا روح روحي انتي", label:"تحبين علاقتنا الحلوة الجميلة إن شاء الله ياحلوتي وجميلتي انتي" }
+    }
+  ];
+
+  let step = 0;
+  const results = [];
+
+  const screen = document.getElementById("screen");
+  const stepHint = document.getElementById("stepHint");
+
+  function setHint(){
+    if(step < flow.length) stepHint.textContent = `السؤال ${step+1} من ${flow.length}`;
+    else stepHint.textContent = "تم ✅";
+  }
+
+  function renderLock(){
+    setHint();
+    screen.className = "fade";
+    screen.innerHTML = `
+      <h1>السلام عليكم بيسو حبيبتي 💖</h1>
+      <p class="question">هذه صفحة خاصة.. اكتبي رمز الدخول 👇</p>
+      <div class="lock">
+        <input id="pin" type="password" inputmode="numeric" placeholder="رمز الدخول (PIN)" />
+        <button class="primary" onclick="checkPin()">دخول</button>
+        <div class="hint">تلميح: الرمز عند عاصم 🤍</div>
+      </div>
+    `;
+    document.getElementById("pin").focus();
+  }
+
+  window.checkPin = function(){
+    const val = (document.getElementById("pin").value || "").trim();
+    if(val === ACCESS_PIN){
+      alert("يا هلا 💕");
+      renderQuestion();
+    }else{
+      alert("الرمز غلط 😅 جرّبي مرة ثانية");
+    }
+  }
+
+  function renderQuestion(){
+    setHint();
+    const item = flow[step];
+    screen.className = "fade";
+    screen.innerHTML = `
+      <h1>لبيسو 💕</h1>
+      <div class="divider"></div>
+      <p class="question">${item.q}</p>
+      <div class="btns">
+        <button class="primary" onclick="answer('yes')">ايه</button>
+        <button class="ghost" onclick="answer('no')">لا</button>
+        <button class="ghost" onclick="answer('els')">مو متأكدة</button>
+      </div>
+    `;
+  }
+
+  window.answer = function(type){
+    const item = flow[step];
+    const picked = item[type];
+    alert(picked.msg);
+    results.push(picked.label);
+
+    step++;
+    if(step < flow.length){
+      renderQuestion();
+    }else{
+      renderFinal();
+    }
+  }
+
+  function renderFinal(){
+    setHint();
+    const finalMsg = `
+      دامك ${results[0]} و ${results[1]} و ${results[2]}<br><br>
+      حاب إننا نتكلم سوا يادنيتي عشان مو حلو هيك بسومتي متضايقه مني وفيه مشاكل الله لا يعيدها بيننا،
+      ودي نتكلم ونحل كل شي والله ما يرضيني زعلك يا اغلى ناسي<br><br>
+      لو سمحتي يابسمتي الحلوه خلينا نعيش ايامنا الحلوه وننهي المشاكل المو حلوه
+    `;
+    screen.className = "fade";
+    screen.innerHTML = `
+      <h1>❤️ رسالة من قلبي ❤️</h1>
+      <div class="divider"></div>
+      <p>${finalMsg}</p>
+      <div class="btns" style="margin-top:18px;">
+        <button class="primary" onclick="copyLink()">نسخ رابط الصفحة</button>
+        <button class="ghost" onclick="location.reload()">إعادة من البداية</button>
+      </div>
+    `;
+  }
+
+  window.copyLink = async function(){
+    try{
+      await navigator.clipboard.writeText(location.href);
+      alert("تم نسخ الرابط ✅");
+    }catch(e){
+      alert("ما قدرت أنسخ تلقائيًا.. انسخ الرابط من شريط العنوان");
+    }
+  }
+
+  // قلوب خلفية
+  const hearts = document.getElementById("hearts");
+  const emojis = ["💗","💕","💖","💘","💞"];
+  for(let i=0;i<18;i++){
+    const s = document.createElement("div");
+    s.className = "heart";
+    s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    s.style.left = Math.random()*100 + "vw";
+    s.style.animationDuration = (8 + Math.random()*10) + "s";
+    s.style.fontSize = (14 + Math.random()*22) + "px";
+    s.style.animationDelay = (-Math.random()*12) + "s";
+    hearts.appendChild(s);
+  }
+
+  // بداية
+  renderLock();
+</script>
+</body>
+</html>
