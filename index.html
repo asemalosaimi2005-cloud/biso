@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>رسالة لبيسو 💕</title>
 
-  <!-- خط عربي لطيف (اختياري - يحتاج نت) -->
+  <!-- خطوط -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Marhey:wght@300;400;600&family=El+Messiri:wght@400;600;700&display=swap" rel="stylesheet">
@@ -42,7 +42,6 @@
     font-family: "El Messiri", Tahoma, Arial, sans-serif;
   }
 
-  /* خلفية نجوم/نقط */
   body::before{
     content:"";
     position:fixed;
@@ -53,7 +52,6 @@
     pointer-events:none;
   }
 
-  /* قلوب خفيفة */
   .hearts{
     position:fixed;
     inset:0;
@@ -87,7 +85,6 @@
     overflow:hidden;
   }
 
-  /* لمعة لطيفة على الكرت */
   .card::after{
     content:"";
     position:absolute;
@@ -231,8 +228,32 @@
     position:relative;
     z-index:1;
   }
-</style>
 
+  /* ✅ Toast (بديل الـ alert) */
+  .toast{
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    max-width: min(720px, 92vw);
+    padding: 12px 16px;
+    border-radius: 16px;
+    background: rgba(0,0,0,.55);
+    border: 1px solid rgba(255,255,255,.18);
+    color: rgba(255,255,255,.92);
+    box-shadow: 0 12px 40px rgba(0,0,0,.35);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease;
+    z-index: 9999;
+    text-align: center;
+  }
+  .toast.show{
+    opacity: 1;
+    transform: translateX(-50%) translateY(-6px);
+  }
+  </style>
 </head>
 
 <body>
@@ -251,12 +272,12 @@
     </div>
   </div>
 
+  <!-- ✅ Toast container -->
+  <div id="toast" class="toast" aria-live="polite"></div>
+
 <script>
-  // ====== إعدادات “الخصوصية” ======
-  // غيّر الرمز هنا (مثال: 2005)
   const ACCESS_PIN = "400";
 
-  // ====== محتوى أسئلتك ورسائلك ======
   const flow = [
     {
       q: "انتي تحبين نفسك صح؟",
@@ -267,14 +288,14 @@
     {
       q: "انتي تحبيني صح؟",
       yes: { msg:"وأنا كمان أحبببببببك يا محبوبتي انتي والله", label:"تحبيني يا ملاكي" },
-      no:  { msg:"متأكد إن هذي مو اجابتك الصدقيه الي ينطق فيها قلبك ياقلبي انتي وعشان هيك أنا كمان مررررره أحبكك", label:"بتحبيني يادنيتي" },
-      els: { msg:"إجابتك غير واضحه لكن أحببببببك مررررره يابسمتي وأكيد إنك تحبيني يا روح روحي انتي", label:"تحبيني إن شاء الله ياروح روحي" }
+      no:  { msg:"متأكد إن هذي مو اجابتك الصدقيه الي ينطق فيها قلبك ياقلبي انتي وعشان هيك أنا كمان مررررّه أحبكك", label:"بتحبيني يادنيتي" },
+      els: { msg:"إجابتك غير واضحه لكن أحببببببك مررررّه يابسمتي وأكيد إنك تحبيني يا روح روحي انتي", label:"تحبيني إن شاء الله ياروح روحي" }
     },
     {
       q: "تحبين علاقتنا صح؟",
       yes: { msg:"وأنا كمان أحبببببب علاقتنا يا محبوبتي انتي والله", label:"تحبين علاقتنا الحلوه والجمميلة ياجميلتي انتي" },
       no:  { msg:"متأكد إن هذي مو اجابتك الصدقيه الي ينطق فيها قلبك ياقلبي انتي أقدر إنك متضايقه مني \"حاليًا\"", label:"بتحبين علاقتنا الحلوه والجميلة ياعيوني الجميلة" },
-      els: { msg:"إجابتك غير واضحه لكن أحببببببك مررررره يابسمتي وأكيد إنك تحبين علاقتنا يا روح روحي انتي", label:"تحبين علاقتنا الحلوة الجميلة إن شاء الله ياحلوتي وجميلتي انتي" }
+      els: { msg:"إجابتك غير واضحه لكن أحببببببك مررررّه يابسمتي وأكيد إنك تحبين علاقتنا يا روح روحي انتي", label:"تحبين علاقتنا الحلوة الجميلة إن شاء الله ياحلوتي وجميلتي انتي" }
     }
   ];
 
@@ -283,6 +304,15 @@
 
   const screen = document.getElementById("screen");
   const stepHint = document.getElementById("stepHint");
+
+  // ✅ Toast بدل alert
+  function toast(msg){
+    const el = document.getElementById("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(window.__toastTimer);
+    window.__toastTimer = setTimeout(() => el.classList.remove("show"), 1700);
+  }
 
   function setHint(){
     if(step < flow.length) stepHint.textContent = `السؤال ${step+1} من ${flow.length}`;
@@ -302,15 +332,22 @@
       </div>
     `;
     document.getElementById("pin").focus();
+
+    // Enter للتأكيد
+    document.getElementById("pin").addEventListener("keydown", (e) => {
+      if(e.key === "Enter") window.checkPin();
+    });
   }
 
   window.checkPin = function(){
     const val = (document.getElementById("pin").value || "").trim();
     if(val === ACCESS_PIN){
-      alert("يا هلا 💕");
+      toast("يا هلا 💕");
+      step = 0;
+      results.length = 0;
       renderQuestion();
     }else{
-      alert("الرمز غلط 😅 جرّبي مرة ثانية");
+      toast("الرمز غلط 😅 جرّبي مرة ثانية");
     }
   }
 
@@ -333,14 +370,18 @@
   window.answer = function(type){
     const item = flow[step];
     const picked = item[type];
-    alert(picked.msg);
+
+    // ✅ بدل النافذة المنبثقة
+    toast(picked.msg);
+
     results.push(picked.label);
 
     step++;
     if(step < flow.length){
-      renderQuestion();
+      // تأخير بسيط عشان المستخدم يقرأ التوست
+      setTimeout(renderQuestion, 350);
     }else{
-      renderFinal();
+      setTimeout(renderFinal, 350);
     }
   }
 
@@ -367,9 +408,9 @@
   window.copyLink = async function(){
     try{
       await navigator.clipboard.writeText(location.href);
-      alert("تم نسخ الرابط ✅");
+      toast("تم نسخ الرابط ✅");
     }catch(e){
-      alert("ما قدرت أنسخ تلقائيًا.. انسخ الرابط من شريط العنوان");
+      toast("ما قدرت أنسخ تلقائيًا.. انسخ الرابط من شريط العنوان");
     }
   }
 
@@ -387,9 +428,7 @@
     hearts.appendChild(s);
   }
 
-  // بداية
   renderLock();
 </script>
 </body>
 </html>
-
